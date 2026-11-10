@@ -1,0 +1,151 @@
+text,category
+"Hello, how are you today?",GREETING
+"Hi there, nice to meet you!",GREETING
+"Hey, what's up?",GREETING
+"Good morning, everyone!",GREETING
+"Good afternoon, sir.",GREETING
+"Good evening, team.",GREETING
+"Greetings to you all.",GREETING
+"Howdy partner, good to see you.",GREETING
+"Hello! Hope you are having a wonderful week.",GREETING
+"Hi everyone, thanks for joining the call.",GREETING
+"Hey friend, long time no see!",GREETING
+"Good day to you, madam.",GREETING
+"Hello, I hope this message finds you well.",GREETING
+"Hi, quick question before we start.",GREETING
+"Hey there! Ready for our meeting?",GREETING
+"Goodbye, have a wonderful weekend!",FAREWELL
+"Bye bye, see you later today.",FAREWELL
+"See you tomorrow at the office.",FAREWELL
+"Take care of yourself, goodbye.",FAREWELL
+"Good night, sleep well.",FAREWELL
+"Farewell, my dear friend.",FAREWELL
+"Catch you later this evening.",FAREWELL
+"Talk to you later, bye!",FAREWELL
+"I have to leave now, see you soon.",FAREWELL
+"Have a great evening ahead, goodbye.",FAREWELL
+"Signing off for the day, bye all.",FAREWELL
+"Bye, let us catch up next week.",FAREWELL
+"Until next time, farewell.",FAREWELL
+"See you around the campus.",FAREWELL
+"Have a safe flight, bye!",FAREWELL
+"What time does the presentation begin?",QUESTION
+"Where can I find the quarterly reports?",QUESTION
+"Who is responsible for server maintenance?",QUESTION
+"Why did the database migration fail?",QUESTION
+"How do I reset my password on this portal?",QUESTION
+"Which version of Python should we install?",QUESTION
+"When will the project review take place?",QUESTION
+"Is there any update regarding the budget?",QUESTION
+"Are you available for a quick phone call?",QUESTION
+"Can anyone tell me what happened in the meeting?",QUESTION
+"Do you know where the API keys are stored?",QUESTION
+"Has the package been delivered yet?",QUESTION
+"Would you be able to attend the demo session tomorrow?",QUESTION
+"What are the prerequisites for this course?",QUESTION
+"How much memory does this model require?",QUESTION
+"Please send me the updated meeting minutes.",REQUEST
+"Could you please review the attached proposal?",REQUEST
+"Kindly provide your feedback on the new design.",REQUEST
+"Can you please share the access credentials with me?",REQUEST
+"I need you to upload the documents to the portal.",REQUEST
+"I would like to request an extension on the deadline.",REQUEST
+"Please help me solve this configuration error.",REQUEST
+"Would you mind forwarding the email to the manager?",REQUEST
+"Please make sure the test cases pass before merging.",REQUEST
+"Could you submit your code changes for review?",REQUEST
+"Kindly verify that the database connection is secure.",REQUEST
+"Please grant me write permissions on this repository.",REQUEST
+"I need assistance with setting up the virtual environment.",REQUEST
+"Can you double-check the billing address for me please?",REQUEST
+"Please let me know once the deployment is finished.",REQUEST
+"Wow, this new user interface looks absolutely stunning!",EXCLAMATION
+"Oh my god, that was such an incredible breakthrough!",EXCLAMATION
+"Hurray! We finally reached our quarterly milestone!",EXCLAMATION
+"Awesome job team, what a phenomenal result!",EXCLAMATION
+"Whoa, that was a remarkably close call!",EXCLAMATION
+"Unbelievable, the response time improved by eighty percent!",EXCLAMATION
+"Yay, our pull request was finally merged into main!",EXCLAMATION
+"Ouch, that was a painful mistake in production!",EXCLAMATION
+"Bravo! Truly fantastic performance by everyone involved!",EXCLAMATION
+"Yikes, the server CPU usage suddenly spiked to ninety percent!",EXCLAMATION
+"What a brilliant and creative solution!",EXCLAMATION
+"Amazing work, congratulations on your graduation!",EXCLAMATION
+"Fantastic news, we just signed the contract!",EXCLAMATION
+"Great heavens, look at how fast the algorithm executes!",EXCLAMATION
+"Superb work on resolving that complex issue!",EXCLAMATION
+"The quarterly revenue report is published on the intranet.",STATEMENT
+"Our application utilizes a microservice architecture.",STATEMENT
+"Machine learning models require clean and labeled data.",STATEMENT
+"The library was updated to the latest stable release yesterday.",STATEMENT
+"Antigravity is an agentic AI coding environment.",STATEMENT
+"The conference will take place in San Francisco this year.",STATEMENT
+"We completed the code refactoring sprint on Friday.",STATEMENT
+"Natural language processing has evolved rapidly in recent years.",STATEMENT
+"The client has signed the service level agreement.",STATEMENT
+"Our backend database runs on PostgreSQL with replication.",STATEMENT
+"Python 3.13 includes improvements to the interpreter and typing.",STATEMENT
+"The project documentation is available in the docs folder.",STATEMENT
+"Traffic is typically heavier during the evening rush hour.",STATEMENT
+"The system performs automated hourly backups to Cloud Storage.",STATEMENT
+"All unit tests are executed automatically in our CI pipeline.",STATEMENT
+"This application is completely broken and keeps crashing constantly.",COMPLAINT
+"I am very disappointed with the poor customer service I received.",COMPLAINT
+"The package arrived damaged and two days later than promised.",COMPLAINT
+"Your service is terrible and this has been a complete waste of time.",COMPLAINT
+"The new update is horrible and introduced countless bugs.",COMPLAINT
+"I have been waiting for hours and still nobody has responded.",COMPLAINT
+"The checkout process failed repeatedly and charged my card twice.",COMPLAINT
+"This is an unacceptable error and causes massive disruption to our workflow.",COMPLAINT
+"The product quality is awful compared to the advertised specifications.",COMPLAINT
+"It does not work at all and the documentation is completely useless.",COMPLAINT
+"I am extremely frustrated with the endless delays.",COMPLAINT
+"The application is horribly slow and unresponsive on mobile.",COMPLAINT
+"Worst experience ever with an online booking platform.",COMPLAINT
+"My account was unexpectedly locked without any explanation.",COMPLAINT
+"The battery life is defective and drains in less than thirty minutes.",COMPLAINT
+"You should consider upgrading the server memory before the launch.",SUGGESTION
+"How about we schedule the team retrospective for Friday morning?",SUGGESTION
+"I suggest we implement rate limiting on the public API endpoints.",SUGGESTION
+"Why don't we try running a beta test with a smaller user group?",SUGGESTION
+"You could try clearing your browser cookies and restarting.",SUGGESTION
+"We might want to add automated regression tests to prevent this issue.",SUGGESTION
+"My recommendation is to use caching to reduce database query load.",SUGGESTION
+"What if we redesigned the onboarding flow for new users?",SUGGESTION
+"You should check the log files to diagnose the root cause.",SUGGESTION
+"I propose we adopt semantic versioning for all our packages.",SUGGESTION
+"It might be a good idea to consult the security team first.",SUGGESTION
+"Perhaps we could explore alternative open-source NLP libraries.",SUGGESTION
+"Why not automate this manual data cleaning pipeline with Python?",SUGGESTION
+"I advise holding a sprint planning meeting before writing code.",SUGGESTION
+"You should take a short break before debugging this issue.",SUGGESTION
+"I am deeply sorry for missing our scheduled appointment.",APOLOGY
+"Please forgive me for the delayed response to your inquiry.",APOLOGY
+"My sincere apologies for the confusion caused by my previous email.",APOLOGY
+"I apologize for the oversight in the invoice calculations.",APOLOGY
+"Pardon me, I did not mean to interrupt your presentation.",APOLOGY
+"Excuse me for the disruption during the live demo.",APOLOGY
+"Sorry about that, my connection dropped momentarily.",APOLOGY
+"I am truly sorry for the inconvenience this bug has caused you.",APOLOGY
+"My bad, I accidentally committed the temporary debug logs.",APOLOGY
+"Please accept our sincere apologies for the unexpected server outage.",APOLOGY
+"I apologize for not getting back to you sooner.",APOLOGY
+"Sorry for any misunderstanding regarding the contract terms.",APOLOGY
+"I am so sorry to hear about the difficulties you encountered.",APOLOGY
+"My apologies for arriving late to the standup meeting.",APOLOGY
+"I deeply regret the error and will rectify it immediately.",APOLOGY
+"Thank you very much for your prompt and helpful assistance.",THANKS
+"Thanks a lot for fixing the bug so quickly!",THANKS
+"I truly appreciate all the hard work you put into this project.",THANKS
+"Many thanks for guiding me through the installation steps.",THANKS
+"Thank you for taking the time to review my pull request.",THANKS
+"Thanks for your valuable insights during the technical discussion.",THANKS
+"I am extremely grateful for your generous support and patience.",THANKS
+"Much obliged for your kind consideration of my application.",THANKS
+"Thank you so much for organizing such an informative webinar.",THANKS
+"Thanks, that completely answered all my questions!",THANKS
+"Heartfelt thanks to everyone who contributed to this release.",THANKS
+"Thank you kindly for your swift response and resolution.",THANKS
+"Thanks a million for your fantastic advice on the architecture.",THANKS
+"I appreciate your continued dedication and collaboration.",THANKS
+"Thanks for being such an awesome mentor and teammate.",THANKS

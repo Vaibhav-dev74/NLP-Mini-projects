@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Platform Overview{% endblock %}
+
+{% block content %}
+<!-- Metrics Summary Cards -->
+<div class="stat-grid">
+  <div class="stat-card">
+    <div>
+      <div class="stat-label">Total Analyzed Texts</div>
+      <div class="stat-value">{{ metrics.total_analyzed }}</div>
+    </div>
+    <div class="stat-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div>
+      <div class="stat-label">Dominant Category</div>
+      <div class="stat-value" style="font-size: 1.4rem;">{{ metrics.top_category }}</div>
+    </div>
+    <div class="stat-icon" style="background-color: rgba(6, 182, 212, 0.15); color: #0891b2;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div>
+      <div class="stat-label">Average Confidence</div>
+      <div class="stat-value">
+        {% if metrics.avg_confidence > 0 %}
+          {{ (metrics.avg_confidence * 100) | round(1) }}%
+        {% else %}
+          N/A
+        {% endif %}
+      </div>
+    </div>
+    <div class="stat-icon" style="background-color: rgba(16, 185, 129, 0.15); color: #059669;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div>
+      <div class="stat-label">ML Engine</div>
+      <div class="stat-value" style="font-size: 1.25rem;">
+        {% if ml_trained %}Trained & Active{% else %}Rules Active{% endif %}
+      </div>
+    </div>
+    <div class="stat-icon" style="background-color: rgba(139, 92, 246, 0.15); color: #7c3aed;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+        <line x1="12" y1="17" x2="12" y2="21"></line>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <!-- Quick Classification Workspace -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        Quick Text Classification
+      </div>
+      <a href="/classifier" class="btn btn-secondary btn-sm">Full Workspace &rarr;</a>
+    </div>
+
+    <form id="classifierForm">
+      <div class="form-group">
+        <label class="form-label" for="dialogueInput">Dialogue or Utterance:</label>
+        <textarea id="dialogueInput" class="form-control" placeholder="e.g., Hello team! Could you please review the attached design proposal?" style="min-height: 90px;"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; align-items: center; justify-content: space-between;">
+        <select id="modeSelect" class="form-select" style="max-width: 220px;">
+          <option value="hybrid" selected>Hybrid (Rules + ML)</option>
+          <option value="rule_based_enhanced">Enhanced Rule Engine (10-Class)</option>
+          <option value="rule_based_original">Original v1.0 Legacy Engine</option>
+          <option value="machine_learning">Machine Learning (TF-IDF)</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Classify Now</button>
+      </div>
+
+      <div id="classifyLoading" style="display:none; text-align:center; padding:1rem; color:var(--text-secondary);">
+        Analyzing intent, sentiment, emotion and text statistics...
+      </div>
+      <div id="classifyError" style="display:none; color:var(--danger); margin-top:0.5rem; font-size:0.875rem;"></div>
+    </form>
+
+    <!-- Interactive Classification Results View -->
+    <div id="resultsContainer" class="results-container" style="display: none; margin-top: 1.25rem;">
+      <div class="result-hero-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 600;">CLASSIFICATION RESULT</span>
+          <span id="resultModeBadge" class="badge badge-statement">Hybrid</span>
+        </div>
+        <div class="hero-category-title">
+          <span id="resultCategory">---</span>
+          <span id="resultCategoryBadge" class="badge">---</span>
+        </div>
+        <div style="font-size: 0.9rem; color: var(--text-secondary);" id="resultConfidenceValue">---</div>
+        <div class="confidence-bar-container">
+          <div id="resultConfidenceBar" class="confidence-bar-fill" style="width: 0%;"></div>
+        </div>
+        <p id="resultExplanation" style="font-size: 0.925rem; color: var(--text-primary); margin-top: 0.5rem; line-height: 1.5;"></p>
+        <div style="margin-top: 0.75rem;">
+          <strong style="font-size: 0.8rem; color: var(--text-secondary);">Detected Keywords:</strong>
+          <span id="resultKeywordsContainer"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Classifications -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        Recent Activity
+      </div>
+      <a href="/history" class="btn btn-secondary btn-sm">View All &rarr;</a>
+    </div>
+
+    {% if recent_history and recent_history | length > 0 %}
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Text</th>
+            <th>Category</th>
+            <th>Sentiment</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in recent_history %}
+          <tr>
+            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+              {{ r.input_text }}
+            </td>
+            <td>
+              <span class="badge badge-{{ r.predicted_category.lower().replace('/', '-') }}">
+                {{ r.predicted_category }}
+              </span>
+            </td>
+            <td>
+              <span class="badge badge-sentiment-{{ (r.sentiment or 'neutral').lower() }}">
+                {{ r.sentiment or 'NEUTRAL' }}
+              </span>
+            </td>
+            <td style="font-size: 0.75rem; color: var(--text-secondary);">
+              {{ r.created_at[11:16] if r.created_at and r.created_at | length >= 16 else r.created_at }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <p>No recent activity yet. Classify dialogue above to record telemetry!</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

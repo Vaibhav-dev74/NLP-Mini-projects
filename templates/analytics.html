@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics{% endblock %}
+{% block page_title %}Real-Time Analytics & Distribution{% endblock %}
+
+{% block content %}
+<div id="analyticsDashboardView">
+  <!-- Metrics Stat Grid -->
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div>
+        <div class="stat-label">Total Classified Records</div>
+        <div class="stat-value">{{ metrics.total_analyzed }}</div>
+      </div>
+      <div class="stat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div>
+        <div class="stat-label">Top Dialogue Intent</div>
+        <div class="stat-value" style="font-size: 1.35rem;">{{ metrics.top_category }}</div>
+      </div>
+      <div class="stat-icon" style="background-color: rgba(6, 182, 212, 0.15); color: #0891b2;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div>
+        <div class="stat-label">Average Confidence</div>
+        <div class="stat-value">
+          {% if metrics.avg_confidence > 0 %}
+            {{ (metrics.avg_confidence * 100) | round(1) }}%
+          {% else %}
+            N/A
+          {% endif %}
+        </div>
+      </div>
+      <div class="stat-icon" style="background-color: rgba(16, 185, 129, 0.15); color: #059669;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  {% if metrics.is_empty %}
+  <div class="card empty-state">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="20" x2="18" y2="10"></line>
+      <line x1="12" y1="20" x2="12" y2="4"></line>
+      <line x1="6" y1="20" x2="6" y2="14"></line>
+    </svg>
+    <h3>No Historical Data Yet</h3>
+    <p style="margin-top: 0.5rem; color: var(--text-secondary);">
+      No classification records have been logged in the SQLite database yet.
+      Head over to the <a href="/classifier">Text Classifier</a> or upload a dataset in <a href="/batch">Batch Analysis</a>
+      to populate interactive charts and analytics telemetry!
+    </p>
+  </div>
+  {% else %}
+  <div class="grid-2">
+    <!-- Category Distribution Chart -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          Category Frequency Distribution
+        </div>
+      </div>
+      <div style="height: 280px; position: relative;">
+        <canvas id="categoryDistChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Sentiment Distribution Chart -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+          </svg>
+          Sentiment Polarity Breakdown
+        </div>
+      </div>
+      <div style="height: 280px; position: relative;">
+        <canvas id="sentimentDistChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Emotion Distribution Chart -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          Affective Emotion Spectrum
+        </div>
+      </div>
+      <div style="height: 280px; position: relative;">
+        <canvas id="emotionDistChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Mode Usage Chart -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          </svg>
+          Classification Engine Distribution
+        </div>
+      </div>
+      <div style="height: 280px; position: relative;">
+        <canvas id="modeDistChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Daily Activity Timeline -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+          Daily Analysis Volume Trend
+        </div>
+      </div>
+      <div style="height: 260px; position: relative;">
+        <canvas id="timelineDistChart"></canvas>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

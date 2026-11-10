@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Classification History{% endblock %}
+{% block page_title %}Classification History & Telemetry Log{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      Historical Classification Logs
+    </div>
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <a href="/api/export/csv" class="btn btn-secondary btn-sm" title="Download all records as CSV">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Export CSV
+      </a>
+      <a href="/api/export/report" class="btn btn-secondary btn-sm" title="Download summary audit report">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        </svg>
+        Export TXT Report
+      </a>
+      <button id="clearHistoryBtn" class="btn btn-danger btn-sm">Clear All</button>
+    </div>
+  </div>
+
+  <!-- Filters Row -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem;">
+    <div>
+      <input type="text" id="historySearchInput" class="form-control" placeholder="Search by text, explanation...">
+    </div>
+    <div>
+      <select id="historyCategoryFilter" class="form-select">
+        <option value="ALL">All Categories</option>
+        {% for cat in categories %}
+        <option value="{{ cat }}">{{ cat }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <select id="historySentimentFilter" class="form-select">
+        <option value="ALL">All Sentiments</option>
+        <option value="POSITIVE">Positive</option>
+        <option value="NEGATIVE">Negative</option>
+        <option value="NEUTRAL">Neutral</option>
+      </select>
+    </div>
+    <div>
+      <select id="historyModeFilter" class="form-select">
+        <option value="all">All Modes</option>
+        <option value="hybrid">Hybrid</option>
+        <option value="rule_based_enhanced">Enhanced Rules</option>
+        <option value="rule_based_original">Original Legacy</option>
+        <option value="machine_learning">Machine Learning</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- History Table -->
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="width: 60px;">ID</th>
+          <th>Submitted Dialogue</th>
+          <th>Category</th>
+          <th>Sentiment</th>
+          <th>Confidence</th>
+          <th>Logged At (UTC)</th>
+          <th style="width: 50px;">Action</th>
+        </tr>
+      </thead>
+      <tbody id="historyTableBody">
+        <tr>
+          <td colspan="7" class="empty-state">Loading history records...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div id="historyPagination" style="display: flex; justify-content: center; margin-top: 1.25rem;"></div>
+</div>
+{% endblock %}

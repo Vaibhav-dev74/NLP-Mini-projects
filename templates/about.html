@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}About Project{% endblock %}
+{% block page_title %}Architecture & Technical Specifications{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      Dialogue Classifier 2.0 - System Overview
+    </div>
+    <button id="retrainModelBtn" class="btn btn-secondary btn-sm" title="Re-evaluate & train Scikit-Learn models">
+      Retrain Model
+    </button>
+  </div>
+
+  <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 1.25rem;">
+    <strong>Dialogue Classifier 2.0</strong> is an enterprise-grade NLP text classification platform.
+    Upgraded from an initial 6-class Tkinter script, v2.0 introduces multi-sentence segmentation, regex word-boundary pattern matching,
+    a trained TF-IDF Scikit-Learn machine learning pipeline (comparing Logistic Regression and Multinomial Naive Bayes), a hybrid consensus resolver,
+    lexicon-contextual sentiment scoring, 6-class emotion detection, SQLite audit telemetry, batch CSV processing, and an interactive SaaS dashboard.
+  </p>
+
+  <h3 style="font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 0.75rem 0;">1. Machine Learning Pipeline & Model Evaluation</h3>
+  <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+    Dual classifiers trained on TF-IDF unigram & bigram features (fitted exclusively on the training split to eliminate data leakage).
+  </p>
+
+  {% if ml_metadata and ml_metadata.models_comparison %}
+  <div class="table-responsive" style="margin-bottom: 1.5rem;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Candidate Model</th>
+          <th>Accuracy</th>
+          <th>Precision (Weighted)</th>
+          <th>Recall (Weighted)</th>
+          <th>F1-Score (Weighted)</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m_name, metrics in ml_metadata.models_comparison.items() %}
+        <tr>
+          <td><strong>{{ m_name }}</strong></td>
+          <td>{{ (metrics.accuracy * 100) | round(2) }}%</td>
+          <td>{{ (metrics.precision_weighted * 100) | round(2) }}%</td>
+          <td>{{ (metrics.recall_weighted * 100) | round(2) }}%</td>
+          <td>{{ (metrics.f1_weighted * 100) | round(2) }}%</td>
+          <td>
+            {% if m_name == ml_metadata.selected_model %}
+              <span class="badge badge-suggestion">Champion Model</span>
+            {% else %}
+              <span class="badge badge-statement">Benchmarked</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p style="color: var(--warning-text); background: var(--warning-bg); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.85rem;">
+    Machine learning models have not been trained yet. Click "Retrain Model" above to train on the dataset.
+  </p>
+  {% endif %}
+
+  <h3 style="font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 0.75rem 0;">2. Supported Dialogue Categories</h3>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+    <div style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+      <span class="badge badge-greeting">GREETING</span>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 4px;">Social opening salutations & inquiries (e.g. "Hello", "Good morning", "Hey").</p>
+    </div>
+    <div style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+      <span class="badge badge-farewell">FAREWELL</span>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 4px;">Departure rituals & well-wishes (e.g. "Goodbye", "Take care", "See you later").</p>
+    </div>
+    <div style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+      <span class="badge badge-question">QUESTION</span>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 4px;">Inquiries seeking information (e.g. "What time?", "Where is it?").</p>
+    </div>
+    <div style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+      <span class="badge badge-request">REQUEST</span>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 4px;">Polite directives asking for action (e.g. "Could you please review?", "Kindly send").</p>
+    </div>
+    <div style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+      <span class="badge badge-exclamation">EXCLAMATION</span>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 4px;">High-intensity emotional interjections (e.g. "Wow!", "Awesome job!").</p>
+    </div>
+    <div style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+      <span class="badge badge-statement">STATEMENT</span>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 4px;">Informative assertions and declarations (e.g. "The report is published.").</p>
+    </div>
+    <div style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+      <span class="badge badge-complaint">COMPLAINT</span>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 4px;">Expressions of customer dissatisfaction or defects (e.g. "This keeps crashing").</p>
+    </div>
+    <div style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+      <span class="badge badge-suggestion">SUGGESTION</span>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 4px;">Proposals and advice (e.g. "You should clear cookies", "Why don't we try?").</p>
+    </div>
+    <div style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+      <span class="badge badge-apology">APOLOGY</span>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 4px;">Expressions of regret (e.g. "I am sorry for the delay", "Pardon me").</p>
+    </div>
+    <div style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+      <span class="badge badge-thanks">THANKS</span>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin-top: 4px;">Expressions of gratitude (e.g. "Thank you very much", "Much appreciated").</p>
+    </div>
+  </div>
+
+  <h3 style="font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 0.75rem 0;">3. Classification Modes</h3>
+  <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8;">
+    <li><strong>Hybrid Classification (Recommended):</strong> Dynamically synthesizes rule-based patterns and machine learning probability confidence with transparent conflict resolution.</li>
+    <li><strong>Enhanced Rule-Based Engine:</strong> 10-class regex word-boundary matcher with multi-sentence intent ranking and pattern extraction.</li>
+    <li><strong>Original Rule-Based Engine:</strong> 100% faithful backward-compatible preservation of the original v1.0 logic from <code>dialogue_classifier.py</code>.</li>
+    <li><strong>Machine Learning:</strong> Pure Scikit-Learn TF-IDF vectorization with true probability distributions (never synthetic numbers).</li>
+  </ul>
+
+  <h3 style="font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 0.75rem 0;">4. Developer Profile</h3>
+  <p style="font-size: 0.9rem; color: var(--text-secondary);">
+    Developed by <strong>Vaibhav Pratap Mishra</strong><br>
+    GitHub: <a href="https://github.com/Vaibhav-dev74" target="_blank" rel="noopener">@Vaibhav-dev74</a><br>
+    Repository: <a href="https://github.com/Vaibhav-dev74/NLP-Mini-projects.git" target="_blank" rel="noopener">NLP-Mini-projects</a>
+  </p>
+</div>
+{% endblock %}
