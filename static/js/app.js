@@ -164,6 +164,29 @@ function renderClassificationResults(data) {
     modeBadge.textContent = modeLabels[data.mode] || data.mode;
   }
 
+  // 1.1 User Intent Mapping
+  const intentText = document.getElementById('resultIntentText');
+  const intentDesc = document.getElementById('resultIntentDesc');
+  const summaryBtn = document.getElementById('downloadSummaryBtn');
+
+  if (data.user_intent) {
+    if (intentText) {
+      intentText.textContent = data.user_intent.specific_sub_intent || data.user_intent.primary_intent;
+    }
+    if (intentDesc) {
+      intentDesc.textContent = data.user_intent.description || '';
+    }
+  }
+
+  if (summaryBtn) {
+    if (data.record_id) {
+      summaryBtn.href = `/api/export/summary/${data.record_id}`;
+      summaryBtn.style.display = 'inline-flex';
+    } else {
+      summaryBtn.style.display = 'none';
+    }
+  }
+
   // 2. Confidence / Probability
   if (data.is_rule_based) {
     if (confValue) confValue.textContent = 'Rule-Based Pattern Match';

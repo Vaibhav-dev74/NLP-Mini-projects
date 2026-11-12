@@ -128,3 +128,35 @@ def test_api_batch_inspect_and_process(client):
     b_data = batch_res.get_json()
     assert b_data["total_rows"] == 3
     assert "processed_file_name" in b_data
+
+
+def test_api_batch_invalid_file(client):
+    """Test rejection of non-CSV files and empty requests."""
+    # 1. Non-CSV upload
+    data = {
+        "file": (io.BytesIO(b"fake image data"), "test.exe")
+    }
+    res = client.post("/api/batch/inspect", data=data, content_type="multipart/form-data")
+    assert res.status_code == 400
+
+    # 2. No file uploaded
+    res_empty = client.post("/api/batch/inspect", data={}, content_type="multipart/form-data")
+    assert res_empty.status_code == 400
+
+
+def test_api_individual_summary_export(client):
+    """Test exporting single record audit summary."""
+    # Create record
+    res = client.post("/api/classify", json={
+        "text": "Could you please review this pull request?",
+        "mode": "hybrid"
+    })
+    rec_id = res.get_json()["record_id"]
+
+    summary_res = client.get(f"/api/export/summary/{rec_id}")
+    assert summary_res.status_code == 200
+    assert "text/plain" in summary_res.content_type
+    content = summary_res.get_data(as_text=True)
+    assert f"[#{rec_id}]" in content
+    assert "REQUEST" in content
+    assert "Primary User Intent" in content

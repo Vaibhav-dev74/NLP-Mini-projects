@@ -242,8 +242,8 @@ class EnhancedRuleClassifier:
 
         # 7. COMPLAINT
         self.complaint_patterns = [
-            (re.compile(r'\b(terrible|horrible|awful|worst|disaster|unacceptable|poor|useless|broken|defective)\b', re.IGNORECASE), "strong_negative_adjective"),
-            (re.compile(r'\b(not\s+working|doesn\'?t\s+work|does\s+not\s+work|failed\s+to|crashed|keeps\s+crashing|stopped\s+working)\b', re.IGNORECASE), "malfunction_phrase"),
+            (re.compile(r'\b(terrible|terribly|horrible|horribly|awful|awfully|worst|disaster|unacceptable|poor|poorly|useless|broken|defective|unresponsive|unreliable|glitchy|buggy)\b', re.IGNORECASE), "strong_negative_adjective"),
+            (re.compile(r'\b(not\s+working|doesn\'?t\s+work|does\s+not\s+work|failed\s+to|crashed|keeps\s+crashing|stopped\s+working|keeps\s+freezing|freezes|too\s+slow|horribly\s+slow)\b', re.IGNORECASE), "malfunction_phrase"),
             (re.compile(r'\b(i\s+am\s+(very\s+)?(disappointed|upset|frustrated|angry|dissatisfied))\b', re.IGNORECASE), "discontent_expression"),
             (re.compile(r'\b(bad\s+service|waste\s+of\s+money|waste\s+of\s+time|ridiculous\s+delay|still\s+haven\'?t\s+received)\b', re.IGNORECASE), "complaint_phrase")
         ]
@@ -261,6 +261,9 @@ class EnhancedRuleClassifier:
         self.exclamation_interjections = re.compile(
             r'\b(wow|omg|hurray|hooray|yay|ouch|oops|whoa|bravo|alas|yikes|awesome|incredible|unbelievable)\b',
             re.IGNORECASE
+        )
+        self.exclamative_phrase = re.compile(
+            r'\b(what\s+a(n)?\s+[a-z]+|how\s+[a-z]+)\b', re.IGNORECASE
         )
 
     def split_sentences(self, text: str) -> List[str]:
@@ -335,10 +338,30 @@ class EnhancedRuleClassifier:
                 matched_patterns.append(tag)
                 return "COMPLAINT", 0.92, f"Matched customer dissatisfaction or defect phrase: '{m.group(0)}'.", matched_keywords, matched_patterns
 
-        # --- Priority 6: QUESTION ---
+        # --- Priority 6: EXCLAMATION (When containing explicit ! and no ?) ---
+        m_interj = self.exclamation_interjections.search(raw)
+        m_exclam_phrase = self.exclamative_phrase.search(raw)
+
+        if has_exclamation_mark and not has_question_mark:
+            matched_patterns.append("terminal_exclamation_mark")
+            if m_interj:
+                matched_keywords.append(m_interj.group(0))
+                matched_patterns.append("interjection")
+                return "EXCLAMATION", 0.96, f"Contains high-intensity emotional interjection: '{m_interj.group(0)}'.", matched_keywords, matched_patterns
+            if m_exclam_phrase:
+                matched_keywords.append(m_exclam_phrase.group(0))
+                matched_patterns.append("exclamative_phrase")
+                return "EXCLAMATION", 0.94, f"Contains exclamative phrase construct: '{m_exclam_phrase.group(0)}'.", matched_keywords, matched_patterns
+            return "EXCLAMATION", 0.88, "Ends with exclamation mark ('!') denoting emphasis.", matched_keywords, matched_patterns
+
+        if m_interj and not has_question_mark:
+            matched_keywords.append(m_interj.group(0))
+            matched_patterns.append("interjection")
+            return "EXCLAMATION", 0.92, f"Contains emotional interjection: '{m_interj.group(0)}'.", matched_keywords, matched_patterns
+
+        # --- Priority 7: QUESTION ---
         if has_question_mark:
             matched_patterns.append("terminal_question_mark")
-            # Extract any wh-words
             wh_match = self.question_wh_pattern.search(raw)
             if wh_match:
                 matched_keywords.append(wh_match.group(0))
@@ -351,17 +374,6 @@ class EnhancedRuleClassifier:
             matched_keywords.append(kw)
             matched_patterns.append("inquiry_syntax")
             return "QUESTION", 0.88, f"Inverted auxiliary or wh-word syntax indicates question: '{kw}'.", matched_keywords, matched_patterns
-
-        # --- Priority 7: EXCLAMATION ---
-        m_interj = self.exclamation_interjections.search(raw)
-        if m_interj:
-            matched_keywords.append(m_interj.group(0))
-            matched_patterns.append("interjection")
-            return "EXCLAMATION", 0.93, f"Contains high-intensity emotional interjection: '{m_interj.group(0)}'.", matched_keywords, matched_patterns
-
-        if has_exclamation_mark:
-            matched_patterns.append("terminal_exclamation_mark")
-            return "EXCLAMATION", 0.85, "Ends with exclamation mark ('!') denoting emphasis.", matched_keywords, matched_patterns
 
         # --- Priority 8: STATEMENT (Default) ---
         return "STATEMENT", 0.70, "Declarative or informative sentence with no dominant speech act flags.", [], ["default_declarative"]

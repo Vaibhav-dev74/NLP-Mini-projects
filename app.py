@@ -20,7 +20,7 @@ from flask import (
 from werkzeug.utils import secure_filename
 
 from config import Config
-from src.preprocessing import TextPreprocessor
+from src.preprocessing import TextPreprocessor, resolve_user_intent
 from src.rule_classifier import EnhancedRuleClassifier, OriginalRuleClassifier
 from src.ml_classifier import DialogueMLClassifier
 from src.hybrid_classifier import HybridClassifier
@@ -196,7 +196,10 @@ def api_classify():
     # 4. Emotion Detection
     emotion_result = emotion_detector.detect(text)
 
-    # 5. Persist to SQLite
+    # 5. User Intent Pragmatic Mapping
+    intent_info = resolve_user_intent(classification_result["category"], text)
+
+    # 6. Persist to SQLite
     record_id = None
     if save_history and classification_result["category"] != "EMPTY INPUT":
         conf_val = classification_result.get("confidence")
@@ -219,6 +222,7 @@ def api_classify():
         "record_id": record_id,
         "input_text": text,
         "category": classification_result["category"],
+        "user_intent": intent_info,
         "confidence": classification_result.get("confidence"),
         "confidence_score": classification_result.get("confidence_score"),
         "probabilities": classification_result.get("probabilities"),
@@ -484,6 +488,52 @@ def api_export_report():
         mimetype="text/plain",
         as_attachment=True,
         download_name=f"dialogue_classifier_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+    )
+
+
+@app.route("/api/export/summary/<int:record_id>", methods=["GET"])
+def api_export_individual_summary(record_id):
+    """Exports a structured individual classification summary report for a specific record."""
+    record = db.get_record_by_id(record_id)
+    if not record:
+        return jsonify({"error": f"Record #{record_id} not found."}), 404
+
+    intent_info = resolve_user_intent(record["predicted_category"], record["input_text"])
+
+    summary_lines = [
+        "=" * 60,
+        f"   DIALOGUE CLASSIFIER 2.0 - INDIVIDUAL AUDIT SUMMARY [#{record['id']}]",
+        "=" * 60,
+        f"Timestamp (UTC)       : {record['created_at']}",
+        f"Classification Mode   : {record['classification_mode']}",
+        "",
+        "--- INPUT TEXT ---",
+        f"\"{record['input_text']}\"",
+        "",
+        "--- CLASSIFICATION FINDINGS ---",
+        f"Dialogue Category     : {record['predicted_category']}",
+        f"Primary User Intent   : {intent_info['primary_intent']}",
+        f"Specific Sub-Intent   : {intent_info['specific_sub_intent']}",
+        f"Communicative Purpose : {intent_info['description']}",
+        f"Confidence Score      : {record['confidence_score'] if record['confidence_score'] is not None else 'N/A (Rule Match)'}",
+        f"Sentiment Analysis    : {record['sentiment']} (Polarity: {record['sentiment_polarity']})",
+        f"Affective Emotion     : {record['emotion']}",
+        "",
+        "--- LINGUISTIC EXPLANATION ---",
+        record['explanation'] or "No explanation generated.",
+        "",
+        "--- DETECTED KEYWORDS ---",
+        record['keywords'] or "None",
+        "=" * 60
+    ]
+
+    content = "\n".join(summary_lines)
+    bytes_data = io.BytesIO(content.encode("utf-8"))
+    return send_file(
+        bytes_data,
+        mimetype="text/plain",
+        as_attachment=True,
+        download_name=f"classification_summary_{record_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
     )
 
 

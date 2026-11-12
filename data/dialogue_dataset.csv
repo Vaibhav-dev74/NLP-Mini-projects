@@ -14,6 +14,21 @@ text,category
 "Hello, I hope this message finds you well.",GREETING
 "Hi, quick question before we start.",GREETING
 "Hey there! Ready for our meeting?",GREETING
+"Hi folks, glad to be here with you all today.",GREETING
+"Hello there, welcome to the engineering department.",GREETING
+"Hey everyone, hope your sprint is going smoothly.",GREETING
+"Good morning! Looking forward to our discussion.",GREETING
+"Hi colleague, trust you had a restful weekend.",GREETING
+"Hey there, let me know when you are free to chat.",GREETING
+"Greetings team, welcome back from the holidays.",GREETING
+"Hello user, welcome to our support portal.",GREETING
+"Hi, hope you are enjoying your day so far.",GREETING
+"Hey buddy, great to connect with you again.",GREETING
+"Good morning, checking in before the standup.",GREETING
+"Hi, just dropping by to say hello.",GREETING
+"Hey all, welcome aboard the project.",GREETING
+"Good afternoon folks, let us get started.",GREETING
+"Hello, I am reaching out regarding your inquiry.",GREETING
 "Goodbye, have a wonderful weekend!",FAREWELL
 "Bye bye, see you later today.",FAREWELL
 "See you tomorrow at the office.",FAREWELL
@@ -29,6 +44,21 @@ text,category
 "Until next time, farewell.",FAREWELL
 "See you around the campus.",FAREWELL
 "Have a safe flight, bye!",FAREWELL
+"Goodbye everyone, thanks for the productive session.",FAREWELL
+"I will speak with you on Monday, bye!",FAREWELL
+"Heading out for the evening, see you all tomorrow.",FAREWELL
+"Bye for now, take care and stay safe.",FAREWELL
+"Signing out, have a pleasant evening.",FAREWELL
+"See you next week at the conference.",FAREWELL
+"I must go now, bye bye!",FAREWELL
+"Take care, talk to you soon.",FAREWELL
+"Wishing you all the best, goodbye.",FAREWELL
+"Catch you on the next call, bye!",FAREWELL
+"Until tomorrow, have a good night.",FAREWELL
+"Logging off for the day, bye team.",FAREWELL
+"See you later, alligator!",FAREWELL
+"Have a wonderful holiday season, farewell.",FAREWELL
+"Bye, keep me posted on the progress.",FAREWELL
 "What time does the presentation begin?",QUESTION
 "Where can I find the quarterly reports?",QUESTION
 "Who is responsible for server maintenance?",QUESTION
@@ -44,6 +74,21 @@ text,category
 "Would you be able to attend the demo session tomorrow?",QUESTION
 "What are the prerequisites for this course?",QUESTION
 "How much memory does this model require?",QUESTION
+"Could this issue be caused by network latency?",QUESTION
+"Where is the latest documentation hosted?",QUESTION
+"Why was the pull request closed without review?",QUESTION
+"Who authorized the production deployment?",QUESTION
+"When is the final deadline for submission?",QUESTION
+"How do we configure environment variables in Docker?",QUESTION
+"Is this feature compatible with Python 3.13?",QUESTION
+"Can you verify if the endpoint is reachable?",QUESTION
+"What steps are required to reproduce this bug?",QUESTION
+"Where do I download the configuration template?",QUESTION
+"Why are the unit test suites taking so long to run?",QUESTION
+"Which machine learning model provides the best F1-score?",QUESTION
+"How frequently does the background cron job execute?",QUESTION
+"Are we expecting any downtime during the migration?",QUESTION
+"Who should I contact regarding billing inquiries?",QUESTION
 "Please send me the updated meeting minutes.",REQUEST
 "Could you please review the attached proposal?",REQUEST
 "Kindly provide your feedback on the new design.",REQUEST
@@ -59,6 +104,21 @@ text,category
 "I need assistance with setting up the virtual environment.",REQUEST
 "Can you double-check the billing address for me please?",REQUEST
 "Please let me know once the deployment is finished.",REQUEST
+"Could you please restart the staging cluster?",REQUEST
+"Kindly send over the signed copy of the agreement.",REQUEST
+"Please update the project roadmap with the new dates.",REQUEST
+"I need you to investigate the sudden memory leak.",REQUEST
+"Would you please approve the pending invoice?",REQUEST
+"Please export the classification logs into a CSV file.",REQUEST
+"Could you generate the test coverage report for us?",REQUEST
+"Kindly assign this ticket to the frontend team.",REQUEST
+"Please ensure all environment variables are documented.",REQUEST
+"I would appreciate it if you could join this debugging call.",REQUEST
+"Can you please re-run the failed pipeline step?",REQUEST
+"Please guide me through the onboarding tutorial.",REQUEST
+"Could you summarize the key action points from the call?",REQUEST
+"Kindly provide administrative access to the dashboard.",REQUEST
+"Please format the dataset according to the specifications.",REQUEST
 "Wow, this new user interface looks absolutely stunning!",EXCLAMATION
 "Oh my god, that was such an incredible breakthrough!",EXCLAMATION
 "Hurray! We finally reached our quarterly milestone!",EXCLAMATION
@@ -74,6 +134,21 @@ text,category
 "Fantastic news, we just signed the contract!",EXCLAMATION
 "Great heavens, look at how fast the algorithm executes!",EXCLAMATION
 "Superb work on resolving that complex issue!",EXCLAMATION
+"Whoa, I cannot believe how intuitive this app feels!",EXCLAMATION
+"Holy cow, we exceeded our sales target by fifty percent!",EXCLAMATION
+"Hurrah, the build succeeded without a single warning!",EXCLAMATION
+"Awesome, you completely nailed the presentation!",EXCLAMATION
+"Wow, that animation transition is breathtaking!",EXCLAMATION
+"Incredible, the accuracy improved significantly after tuning!",EXCLAMATION
+"Yikes, that was an extremely close deadline!",EXCLAMATION
+"Oh wow, look at all these insightful analytics charts!",EXCLAMATION
+"Bravo, an outstanding contribution to the open-source community!",EXCLAMATION
+"Yay, our research paper got accepted at the conference!",EXCLAMATION
+"Astounding performance, this is truly state of the art!",EXCLAMATION
+"Unbelievable, all twenty-two unit tests passed instantaneously!",EXCLAMATION
+"What a sensational achievement by the engineering group!",EXCLAMATION
+"Splendid effort, everyone should be extremely proud!",EXCLAMATION
+"My goodness, that dataset query finished in milliseconds!",EXCLAMATION
 "The quarterly revenue report is published on the intranet.",STATEMENT
 "Our application utilizes a microservice architecture.",STATEMENT
 "Machine learning models require clean and labeled data.",STATEMENT
@@ -89,6 +164,21 @@ text,category
 "Traffic is typically heavier during the evening rush hour.",STATEMENT
 "The system performs automated hourly backups to Cloud Storage.",STATEMENT
 "All unit tests are executed automatically in our CI pipeline.",STATEMENT
+"The algorithm has a time complexity of O(N log N).",STATEMENT
+"Data visualization helps stakeholders understand metrics quickly.",STATEMENT
+"We migrated our persistent data to an encrypted storage volume.",STATEMENT
+"The server is hosted in the US East data center region.",STATEMENT
+"TF-IDF measures word frequency relative to the broader corpus.",STATEMENT
+"Our team consists of five software engineers and two analysts.",STATEMENT
+"The cache expiration duration is set to three hundred seconds.",STATEMENT
+"REST APIs communicate over HTTP using JSON payloads.",STATEMENT
+"The repository includes comprehensive installation instructions.",STATEMENT
+"Containerization ensures consistency across development environments.",STATEMENT
+"The model was trained on historical customer service inquiries.",STATEMENT
+"Code reviews ensure adherence to architectural best practices.",STATEMENT
+"The database schema includes indexes for fast lookup queries.",STATEMENT
+"The website is optimized for modern desktop and mobile browsers.",STATEMENT
+"We deployed the latest build to the production cluster.",STATEMENT
 "This application is completely broken and keeps crashing constantly.",COMPLAINT
 "I am very disappointed with the poor customer service I received.",COMPLAINT
 "The package arrived damaged and two days later than promised.",COMPLAINT
@@ -104,6 +194,21 @@ text,category
 "Worst experience ever with an online booking platform.",COMPLAINT
 "My account was unexpectedly locked without any explanation.",COMPLAINT
 "The battery life is defective and drains in less than thirty minutes.",COMPLAINT
+"The system crashed again and lost all my unsaved progress.",COMPLAINT
+"I submitted three tickets and received zero helpful assistance.",COMPLAINT
+"This software is full of glitches and completely unreliable.",COMPLAINT
+"The billing amount is incorrect and I was overcharged significantly.",COMPLAINT
+"The sync feature broke and corrupted my local database files.",COMPLAINT
+"Terrible audio quality during calls, people can barely hear me.",COMPLAINT
+"The user interface is confusing, clunky, and poorly designed.",COMPLAINT
+"I am dissatisfied with the lack of transparency in your pricing.",COMPLAINT
+"The search function yields zero results even for basic keywords.",COMPLAINT
+"It keeps freezing every time I try to export a report.",COMPLAINT
+"This update ruined my entire workflow and caused major delays.",COMPLAINT
+"Extremely disappointed with the lack of customer support on weekends.",COMPLAINT
+"The delivered items were missing critical components.",COMPLAINT
+"Your platform has been down three times this week already.",COMPLAINT
+"This is by far the most frustrating software I have ever used.",COMPLAINT
 "You should consider upgrading the server memory before the launch.",SUGGESTION
 "How about we schedule the team retrospective for Friday morning?",SUGGESTION
 "I suggest we implement rate limiting on the public API endpoints.",SUGGESTION
@@ -119,6 +224,21 @@ text,category
 "Why not automate this manual data cleaning pipeline with Python?",SUGGESTION
 "I advise holding a sprint planning meeting before writing code.",SUGGESTION
 "You should take a short break before debugging this issue.",SUGGESTION
+"How about we write unit tests before implementing the new feature?",SUGGESTION
+"You might consider using a connection pool for the database.",SUGGESTION
+"I recommend switching to a dark mode theme for better readability.",SUGGESTION
+"Why don't you review the documentation before opening a bug ticket?",SUGGESTION
+"We could potentially split this monolithic file into smaller modules.",SUGGESTION
+"What if we surveyed our active users to gather UX feedback?",SUGGESTION
+"You should add input validation to prevent SQL injection attacks.",SUGGESTION
+"I propose scheduling weekly knowledge sharing sessions for the team.",SUGGESTION
+"Perhaps we should enable compression on our static asset bundle.",SUGGESTION
+"You ought to verify your dependencies using a lock file.",SUGGESTION
+"Why not use Docker Compose to simplify local development setup?",SUGGESTION
+"It would be beneficial to add automated linting in the pull request pipeline.",SUGGESTION
+"How about we refactor the data processing pipeline to use pandas vectors?",SUGGESTION
+"I suggest providing clear error messages when API requests fail.",SUGGESTION
+"You could try testing the endpoint using curl or Postman.",SUGGESTION
 "I am deeply sorry for missing our scheduled appointment.",APOLOGY
 "Please forgive me for the delayed response to your inquiry.",APOLOGY
 "My sincere apologies for the confusion caused by my previous email.",APOLOGY
@@ -134,6 +254,21 @@ text,category
 "I am so sorry to hear about the difficulties you encountered.",APOLOGY
 "My apologies for arriving late to the standup meeting.",APOLOGY
 "I deeply regret the error and will rectify it immediately.",APOLOGY
+"Forgive me, I misunderstood the requirements in the specification.",APOLOGY
+"I sincerely apologize for the mistake in the financial spreadsheet.",APOLOGY
+"Pardon my late reply, I was away from my desk on a client call.",APOLOGY
+"Sorry to bother you during your lunch break.",APOLOGY
+"I apologize unreservedly for the breakdown in communication.",APOLOGY
+"Excuse me, I gave you the wrong branch name earlier.",APOLOGY
+"Deeply sorry for the typo in the release announcement.",APOLOGY
+"Please forgive the oversight, we will re-issue the report today.",APOLOGY
+"My heartfelt apologies for the inconvenience caused to your team.",APOLOGY
+"I am sorry, I did not catch what you just said.",APOLOGY
+"Apologies for the noise in the background during the call.",APOLOGY
+"Sorry about the confusion, that documentation section was outdated.",APOLOGY
+"I take full responsibility for the deployment failure, my apologies.",APOLOGY
+"Pardon me for asking again, but could you clarify the date?",APOLOGY
+"Sorry for the delayed delivery, we faced unexpected logistics hurdles.",APOLOGY
 "Thank you very much for your prompt and helpful assistance.",THANKS
 "Thanks a lot for fixing the bug so quickly!",THANKS
 "I truly appreciate all the hard work you put into this project.",THANKS
@@ -149,3 +284,18 @@ text,category
 "Thanks a million for your fantastic advice on the architecture.",THANKS
 "I appreciate your continued dedication and collaboration.",THANKS
 "Thanks for being such an awesome mentor and teammate.",THANKS
+"Thank you for the quick turnaround on the design revisions.",THANKS
+"Many thanks for resolving the server permission issue so fast.",THANKS
+"I am very grateful for your thorough code review comments.",THANKS
+"Thanks for following up on this critical customer issue.",THANKS
+"Big thanks to the DevOps team for the smooth deployment.",THANKS
+"Thank you for sharing the insightful research paper with me.",THANKS
+"I really appreciate you jumping on the troubleshooting call.",THANKS
+"Thanks a bunch for your help with setting up the test environment.",THANKS
+"Thank you for your constructive and actionable feedback.",THANKS
+"Much appreciated, that saved me hours of debugging!",THANKS
+"Thanks for clarifying the policy guidelines for us.",THANKS
+"Thank you all for attending the demo today.",THANKS
+"Grateful for your assistance during the system migration.",THANKS
+"Thanks for always being ready to lend a helping hand.",THANKS
+"Thank you for an inspiring and well-structured workshop.",THANKS

@@ -2,7 +2,7 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-22%20passed-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/tests-38%20passed-brightgreen.svg)]()
 [![Flask](https://img.shields.io/badge/framework-Flask%203.1-black.svg)](https://flask.palletsprojects.com/)
 [![Scikit-Learn](https://img.shields.io/badge/ML-Scikit--Learn%201.9-orange.svg)](https://scikit-learn.org/)
 
@@ -317,7 +317,7 @@ python Emoji-text.py
 
 ## 🧪 Automated Testing
 
-The project includes 22 automated unit and integration tests covering preprocessing, rule precision, ML training, probabilities, database CRUD, sentiment, emotion, and all REST endpoints.
+The project includes **38 automated unit and integration tests** covering preprocessing, rule precision, ML training, probabilities, database CRUD, sentiment, emotion, intent resolution, and all REST endpoints.
 
 Run the test suite:
 ```bash
@@ -332,11 +332,27 @@ tests/test_api.py::test_api_classify_modes PASSED
 tests/test_api.py::test_api_history_and_analytics PASSED
 tests/test_api.py::test_api_exports PASSED
 tests/test_api.py::test_api_batch_inspect_and_process PASSED
+tests/test_api.py::test_api_batch_invalid_file PASSED
+tests/test_api.py::test_api_individual_summary_export PASSED
+tests/test_classifier.py::test_empty_input PASSED
+tests/test_classifier.py::test_greeting_sentences PASSED
+tests/test_classifier.py::test_farewell_sentences PASSED
+tests/test_classifier.py::test_question_sentences PASSED
+tests/test_classifier.py::test_request_sentences PASSED
+tests/test_classifier.py::test_exclamation_sentences PASSED
+tests/test_classifier.py::test_complaint_sentences PASSED
+tests/test_classifier.py::test_suggestion_sentences PASSED
+tests/test_classifier.py::test_long_paragraphs PASSED
+tests/test_classifier.py::test_mixed_punctuation PASSED
+tests/test_classifier.py::test_user_intent_resolution PASSED
+tests/test_database.py::test_database_initialization_and_schema PASSED
+tests/test_database.py::test_database_crud_operations PASSED
 tests/test_database_and_batch.py::test_database_crud PASSED
 tests/test_database_and_batch.py::test_analytics_metrics PASSED
 tests/test_ml_classifier.py::test_ml_training_and_evaluation PASSED
 tests/test_ml_classifier.py::test_ml_prediction_probabilities PASSED
 tests/test_ml_classifier.py::test_hybrid_classification PASSED
+tests/test_ml_classifier.py::test_unknown_categories_and_invalid_dataset PASSED
 tests/test_preprocessing.py::test_empty_input PASSED
 tests/test_preprocessing.py::test_whitespace_and_unicode_normalization PASSED
 tests/test_preprocessing.py::test_key_punctuation_preservation PASSED
@@ -349,7 +365,7 @@ tests/test_rule_classifier.py::test_multi_sentence_handling PASSED
 tests/test_sentiment_emotion.py::test_sentiment_positive_negative_neutral PASSED
 tests/test_sentiment_emotion.py::test_emotion_detection PASSED
 
-============================= 22 passed in 5.14s ==============================
+============================= 38 passed in 6.79s ==============================
 ```
 
 ---

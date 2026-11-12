@@ -62,3 +62,21 @@ def test_hybrid_classification(trained_ml):
     # Empty test
     res_empty = hybrid.classify("")
     assert res_empty["category"] == "EMPTY INPUT"
+
+
+def test_unknown_categories_and_invalid_dataset(tmp_path):
+    """Test validation catches unknown categories and missing columns."""
+    clf = DialogueMLClassifier("models")
+
+    # 1. Unknown category label
+    invalid_csv = tmp_path / "invalid_cat.csv"
+    invalid_csv.write_text("text,category\nHello,UNKNOWN_LABEL\nGood morning,GREETING\n")
+    with pytest.raises(ValueError, match="unsupported category labels"):
+        clf.load_dataset(str(invalid_csv))
+
+    # 2. Missing required columns
+    missing_cols_csv = tmp_path / "missing_cols.csv"
+    missing_cols_csv.write_text("sentence,label\nHello,GREETING\n")
+    with pytest.raises(ValueError, match="missing mandatory column"):
+        clf.load_dataset(str(missing_cols_csv))
+

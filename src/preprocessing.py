@@ -27,6 +27,107 @@ DIALOGUE_STOPWORDS: Set[str] = {
     "at", "by", "for", "with", "about", "against", "between", "into"
 }
 
+# Standard Intent and Pragmatic Speech Act Taxonomy
+INTENT_TAXONOMY: Dict[str, Dict[str, str]] = {
+    "GREETING": {
+        "primary_intent": "Initiate Conversation / Social Salutation",
+        "description": "User opens a conversational channel and establishes social rapport."
+    },
+    "FAREWELL": {
+        "primary_intent": "Conversation Termination / Parting Well-Wishes",
+        "description": "User signals closure of conversational dialogue and offers well-wishes."
+    },
+    "QUESTION": {
+        "primary_intent": "Information Seeking / Clarification Inquiry",
+        "description": "User seeks information, explanations, facts, or confirmation."
+    },
+    "REQUEST": {
+        "primary_intent": "Action Directive / Assistance Seeking",
+        "description": "User requests specific actions, assistance, resources, or services."
+    },
+    "EXCLAMATION": {
+        "primary_intent": "Emotional Reaction / Discourse Emphasis",
+        "description": "User expresses high-arousal emotional response or dramatic emphasis."
+    },
+    "STATEMENT": {
+        "primary_intent": "Information Sharing / Fact Assertion",
+        "description": "User provides declarative observations, facts, status, or context."
+    },
+    "COMPLAINT": {
+        "primary_intent": "Dissatisfaction Escalation / Issue Reporting",
+        "description": "User reports grievances, bugs, poor service, or failed expectations."
+    },
+    "SUGGESTION": {
+        "primary_intent": "Advisory Proposal / Recommendation",
+        "description": "User proposes ideas, optimizations, advice, or alternative courses of action."
+    },
+    "APOLOGY": {
+        "primary_intent": "Social Repair / Regret Expression",
+        "description": "User acknowledges an error, inconvenience, or delayed response with regret."
+    },
+    "THANKS": {
+        "primary_intent": "Gratitude Expression / Social Closure",
+        "description": "User expresses appreciation, indebtedness, or acknowledgment of helpfulness."
+    },
+    "EMPTY INPUT": {
+        "primary_intent": "Null Input / No Communicative Intent",
+        "description": "No text provided to discern intent."
+    }
+}
+
+
+def resolve_user_intent(category: str, text: str = "") -> Dict[str, str]:
+    """
+    Maps the predicted dialogue category and text cues to specific user intent,
+    communicative purpose, and domain action type.
+    """
+    cat_key = category.upper() if category else "STATEMENT"
+    base = INTENT_TAXONOMY.get(cat_key, {
+        "primary_intent": f"General {cat_key} Intent",
+        "description": f"User engaged in {cat_key.lower()} dialogue act."
+    })
+
+    sub_intent = base["primary_intent"]
+    t_lower = text.lower() if text else ""
+
+    # Fine-grained contextual sub-intent detection
+    if cat_key == "QUESTION":
+        if any(w in t_lower for w in ["what time", "when", "schedule"]):
+            sub_intent = "Temporal / Scheduling Inquiry"
+        elif any(w in t_lower for w in ["where", "location", "path", "find"]):
+            sub_intent = "Resource / Location Inquiry"
+        elif any(w in t_lower for w in ["why", "cause", "reason"]):
+            sub_intent = "Causality / Diagnostic Inquiry"
+        elif any(w in t_lower for w in ["how", "steps", "procedure"]):
+            sub_intent = "Procedural / Implementation Inquiry"
+        elif any(w in t_lower for w in ["who", "responsible", "owner"]):
+            sub_intent = "Ownership / Accountability Inquiry"
+    elif cat_key == "REQUEST":
+        if any(w in t_lower for w in ["review", "pr", "pull request", "inspect"]):
+            sub_intent = "Code / Document Review Request"
+        elif any(w in t_lower for w in ["help", "assist", "support"]):
+            sub_intent = "Troubleshooting / Assistance Request"
+        elif any(w in t_lower for w in ["send", "share", "upload", "provide"]):
+            sub_intent = "Asset / Data Transfer Request"
+        elif any(w in t_lower for w in ["restart", "deploy", "run", "execute"]):
+            sub_intent = "System / DevOps Action Request"
+    elif cat_key == "COMPLAINT":
+        if any(w in t_lower for w in ["crash", "freeze", "bug", "broken", "glitch"]):
+            sub_intent = "Technical Stability / Defect Escalation"
+        elif any(w in t_lower for w in ["delay", "late", "waiting", "hours"]):
+            sub_intent = "SLA Breach / Delivery Delay Complaint"
+        elif any(w in t_lower for w in ["service", "support", "agent", "nobody"]):
+            sub_intent = "Customer Service Quality Complaint"
+        elif any(w in t_lower for w in ["charge", "billed", "invoice", "money", "payment"]):
+            sub_intent = "Billing & Financial Dispute"
+
+    return {
+        "primary_intent": base["primary_intent"],
+        "specific_sub_intent": sub_intent,
+        "description": base["description"]
+    }
+
+
 
 class TextPreprocessor:
     """
