@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Dialogue Classifier 2.0{% endblock %} - Intelligent NLP Classification System</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/logo.svg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <!-- Chart.js for data visualization -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,7 +14,7 @@
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="brand-icon">D2</div>
+        <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Logo" width="34" height="34" style="border-radius: 8px;">
         <div>
           <span class="brand-title">Dialogue</span>
           <span class="brand-badge">2.0</span>

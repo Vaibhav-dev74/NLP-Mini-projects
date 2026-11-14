@@ -43,9 +43,16 @@ class Database:
                     classification_mode TEXT NOT NULL,
                     explanation TEXT,
                     keywords TEXT,
+                    user_intent TEXT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
             """)
+            # Auto-migration: ensure user_intent column exists if database existed prior
+            cursor.execute("PRAGMA table_info(classifications);")
+            existing_cols = [r[1] for r in cursor.fetchall()]
+            if "user_intent" not in existing_cols:
+                cursor.execute("ALTER TABLE classifications ADD COLUMN user_intent TEXT;")
+
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_classifications_created_at
                 ON classifications (created_at DESC);
@@ -70,7 +77,8 @@ class Database:
         emotion: str,
         classification_mode: str,
         explanation: str,
-        keywords: List[str]
+        keywords: List[str],
+        user_intent: Optional[str] = None
     ) -> int:
         """Inserts a new classification record using parameterized SQL."""
         keywords_str = ", ".join(keywords) if isinstance(keywords, list) else str(keywords or "")
@@ -89,8 +97,9 @@ class Database:
                     classification_mode,
                     explanation,
                     keywords,
+                    user_intent,
                     created_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """, (
                 input_text,
                 predicted_category,
@@ -101,6 +110,7 @@ class Database:
                 classification_mode,
                 explanation,
                 keywords_str,
+                user_intent or "",
                 now_utc
             ))
             conn.commit()

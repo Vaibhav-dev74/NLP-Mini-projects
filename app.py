@@ -5,6 +5,7 @@ Flask Application and REST API Gateway for Dialogue Classifier 2.0.
 import os
 import io
 import csv
+import uuid
 from datetime import datetime, timezone
 from typing import Dict, Any
 
@@ -215,7 +216,8 @@ def api_classify():
             emotion=emotion_result["emotion"],
             classification_mode=mode,
             explanation=classification_result.get("explanation", ""),
-            keywords=classification_result.get("matched_keywords", [])
+            keywords=classification_result.get("matched_keywords", []),
+            user_intent=intent_info.get("primary_intent")
         )
 
     response = {
@@ -255,12 +257,13 @@ def api_batch_inspect():
         return jsonify({"error": "Only CSV files are supported."}), 400
 
     filename = secure_filename(file.filename)
-    save_path = os.path.join(Config.UPLOAD_FOLDER, f"temp_{filename}")
+    unique_temp_name = f"temp_{uuid.uuid4().hex[:8]}_{filename}"
+    save_path = os.path.join(Config.UPLOAD_FOLDER, unique_temp_name)
     file.save(save_path)
 
     try:
         inspection = batch_processor.inspect_csv(save_path)
-        inspection["temp_filename"] = f"temp_{filename}"
+        inspection["temp_filename"] = unique_temp_name
         return jsonify(inspection)
     except Exception as e:
         if os.path.exists(save_path):
@@ -403,7 +406,7 @@ def api_export_csv():
     output = io.StringIO()
     writer = csv.writer(output)
     writer.writerow([
-        "ID", "Input Text", "Predicted Category", "Confidence Score",
+        "ID", "Input Text", "Predicted Category", "User Intent", "Confidence Score",
         "Sentiment", "Sentiment Polarity", "Emotion",
         "Classification Mode", "Explanation", "Keywords", "Created At"
     ])
@@ -413,6 +416,7 @@ def api_export_csv():
             r["id"],
             r["input_text"],
             r["predicted_category"],
+            r.get("user_intent") or "",
             r["confidence_score"] or "",
             r["sentiment"] or "",
             r["sentiment_polarity"] or "",

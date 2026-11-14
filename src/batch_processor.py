@@ -11,6 +11,7 @@ from typing import Dict, Any, List, Optional, Tuple
 import pandas as pd
 
 from config import Config
+from src.preprocessing import resolve_user_intent
 from src.rule_classifier import EnhancedRuleClassifier, OriginalRuleClassifier
 from src.ml_classifier import DialogueMLClassifier
 from src.hybrid_classifier import HybridClassifier
@@ -100,6 +101,9 @@ class BatchProcessor:
         if text_column not in df.columns:
             raise ValueError(f"Selected column '{text_column}' not found in CSV. Available: {list(df.columns)}")
 
+        if len(df) == 0:
+            raise ValueError("The uploaded CSV file contains no data rows to classify.")
+
         # Limit row processing for performance
         if len(df) > max_rows:
             df = df.iloc[:max_rows].copy()
@@ -115,6 +119,7 @@ class BatchProcessor:
             engine = self.hybrid
 
         categories = []
+        user_intents = []
         confidences = []
         sentiments = []
         emotions = []
@@ -123,7 +128,11 @@ class BatchProcessor:
         category_counts: Dict[str, int] = {}
 
         for _, row in df.iterrows():
-            raw_text = str(row.get(text_column, "") or "")
+            val = row.get(text_column)
+            if pd.isna(val) or val is None:
+                raw_text = ""
+            else:
+                raw_text = str(val).strip()
 
             if mode in ["rule_based_original", "rule_based_enhanced", "hybrid"]:
                 cls_res = engine.classify(raw_text)
@@ -138,8 +147,11 @@ class BatchProcessor:
             sent = sent_res.get("sentiment", "NEUTRAL")
             emo = emo_res.get("emotion", "NEUTRAL")
             expl = cls_res.get("explanation", "")
+            intent_res = resolve_user_intent(cat, raw_text)
+            primary_intent = intent_res.get("primary_intent", cat)
 
             categories.append(cat)
+            user_intents.append(primary_intent)
             confidences.append(conf if conf is not None else "")
             sentiments.append(sent)
             emotions.append(emo)
@@ -157,11 +169,13 @@ class BatchProcessor:
                     emotion=emo,
                     classification_mode=mode,
                     explanation=expl,
-                    keywords=cls_res.get("matched_keywords", [])
+                    keywords=cls_res.get("matched_keywords", []),
+                    user_intent=primary_intent
                 )
 
         # Append new columns to dataframe
         df["predicted_category"] = categories
+        df["user_intent"] = user_intents
         df["confidence"] = confidences
         df["sentiment"] = sentiments
         df["emotion"] = emotions

@@ -272,7 +272,14 @@ python Emoji-text.py
 - **Response**:
   ```json
   {
+    "record_id": 1,
+    "input_text": "Hello team! Could you please send me the final report?",
     "category": "REQUEST",
+    "user_intent": {
+      "primary_intent": "Action Directive / Assistance Seeking",
+      "specific_sub_intent": "Asset / Data Transfer Request",
+      "description": "User requests specific actions, assistance, resources, or services."
+    },
     "confidence": 0.88,
     "confidence_score": 0.88,
     "mode": "hybrid",
@@ -308,8 +315,9 @@ python Emoji-text.py
 
 ### 4. Telemetry & Export
 - **Analytics Metrics**: `GET /api/analytics`
-- **Export CSV**: `GET /api/export/csv`
-- **Export Summary Report**: `GET /api/export/report`
+- **Export All CSV**: `GET /api/export/csv`
+- **Export Audit Summary (Single Record)**: `GET /api/export/summary/<id>`
+- **Export System Summary Report**: `GET /api/export/report`
 - **System Health**: `GET /api/health`
 - **Retrain Models**: `POST /api/train`
 

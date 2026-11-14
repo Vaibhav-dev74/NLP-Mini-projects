@@ -564,15 +564,23 @@ function initHistoryWorkspace() {
         ? `${Math.round(r.confidence_score * 100)}%`
         : '<span style="color:var(--text-muted);">Rule Match</span>';
 
+      const intentDisplay = r.user_intent ? `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${escapeHtml(r.user_intent)}</div>` : '';
+
       tr.innerHTML = `
         <td><strong>#${r.id}</strong></td>
         <td style="max-width:280px; word-break:break-word;">${escapeHtml(r.input_text)}</td>
-        <td><span class="badge badge-${r.predicted_category.toLowerCase().replace('/', '-')}">${r.predicted_category}</span></td>
+        <td>
+          <span class="badge badge-${r.predicted_category.toLowerCase().replace('/', '-')}">${r.predicted_category}</span>
+          ${intentDisplay}
+        </td>
         <td><span class="badge badge-sentiment-${(r.sentiment || 'neutral').toLowerCase()}">${r.sentiment || 'NEUTRAL'}</span></td>
         <td>${confDisplay}</td>
         <td style="font-size:0.8rem; color:var(--text-secondary);">${r.created_at || ''}</td>
         <td>
-          <button class="btn btn-secondary btn-sm delete-btn" data-id="${r.id}" title="Delete record">
+          <a href="/api/export/summary/${r.id}" class="btn btn-secondary btn-sm" title="Download Summary TXT" style="padding: 2px 8px; margin-right: 4px; text-decoration: none;">
+            📄
+          </a>
+          <button class="btn btn-secondary btn-sm delete-btn" data-id="${r.id}" title="Delete record" style="padding: 2px 8px;">
             &times;
           </button>
         </td>

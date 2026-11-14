@@ -1,5 +1,5 @@
 {
-  "trained_at": "2026-11-12T21:34:54.039830+00:00",
+  "trained_at": "2026-11-14T02:22:47.815849+00:00",
   "dataset_file": "data/dialogue_dataset.csv",
   "total_samples": 300,
   "training_samples": 240,
